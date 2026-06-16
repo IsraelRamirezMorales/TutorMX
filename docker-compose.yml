@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tutormx_web
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    restart: always
+
+# Para correr en modo desarrollo con recarga en vivo (live reload), puedes modificar la sección 'web' a:
+#   command: npm run dev
+#   volumes:
+#     - .:/app
+#     - /app/node_modules
+#     - /app/.next
