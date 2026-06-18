@@ -1,79 +1,56 @@
 # TutorMX 🎓
 
-**TutorMX** is an interactive, responsive web application designed as a simulator for finding, filtering, and booking academic tutoring sessions in real time. This project was developed as part of the **Web Programming (Unit 3)** curriculum for the Computer Systems Engineering degree at the **Instituto Tecnológico de Morelia**.
+**TutorMX** (INTRU-HUB) es una plataforma web integral y responsiva diseñada para conectar a estudiantes universitarios con tutores académicos en tiempo real. El sistema permite descubrir materias, realizar búsquedas avanzadas de asesores, coordinar tutorías y fomentar la retroalimentación y reputación académica dentro de comunidades universitarias.
 
-The main objective is to demonstrate the practical application of a modular client-side architecture using **HTML5, CSS3 (via Tailwind CSS), and Vanilla JavaScript** for dynamic DOM manipulation and local data persistence.
-
-<img src="img/dashboard_principal.png" alt="TutorMX Dashboard Preview">
-
-## 🚀 Key Features
-
-* **Modular & Clean Architecture:** Strict separation of concerns, housing the structure in HTML, visual styling using Tailwind CSS, and behavioral logic within external JavaScript modules.
-* **Seamless Simulated Authentication:** A unified Login and Registration system built directly into the landing page (`index.html`). JavaScript handles DOM manipulation to instantly toggle between both views without page refreshes, providing real-time client-side validation for all 5 required fields (*Full Name, Role, Subject of Interest, Email, and Password*).
-* **Dynamic DOM Rendering:** The main control panel (`dashboard.html`) dynamically builds and injects tutor profile cards into the DOM using an array of JavaScript objects and a `forEach` loop, eliminating the need for hardcoded, redundant HTML structures.
-* **Real-Time Interactive Search:** Features a predictive filtering search bar bound to a JavaScript `input` event. The tutor catalog updates instantaneously on-screen as the user types a specific subject, technology, or teacher's name without requiring a page reload.
-* **Interactive Booking Workflow (Modals):** A clean modal popup captures specific session requirements—such as Date, Time, and Topic—with robust client-side validation to prevent incomplete submissions.
-* **Local Data Persistence (Web Storage):** Integrates `localStorage` to preserve user profiles and booked appointments locally in the browser, ensuring data survives manual page refreshes for a realistic application experience.
-* **Dynamic Appointment Management (Visual CRUD):** A dedicated section titled *"My Scheduled Tutoring"* reads active bookings from storage, paints them onto the screen dynamically, and features dynamic cancel buttons that delete the visual DOM node, clear the record from `localStorage`, and update the overall tutoring counter in real time.
-* **Mobile-First & Fully Responsive Layout:** Built using modern utility classes from **Tailwind CSS**, making the entire dashboard fluidly adapt to mobile devices, tablets, and desktop displays.
-
-## 🛠️ Technology Stack
-
-* **HTML5** – Semantic structural markup.
-* **Tailwind CSS** – Utility-first CSS framework for rapid, modern, and responsive UI styling.
-* **JavaScript (ES6+)** – Client-side logic including native event handling (`input`, `click`, `submit`), DOM tree manipulation, array methods (`forEach`, `find`), and `localStorage` persistence.
-
-## 📁 Project Structure
-
-```text
-proyecto-u3/
-│
-├── index.html          # Login / Registration portal (Dynamic toggle view)
-├── README.md           # Repository documentation
-│
-├── pages/
-│   └── dashboard.html  # Main panel (Search filter, tutor cards, and booked sessions)
-│
-└── js/                 # Client-side script modules
-    └── dashboard.js    # Data rendering, real-time filtering, modals, and local storage logic
-```
-
-## 💻 Code Preview: Data Simulation
-
-The tutoring staff and their technical domains (such as *Databases, Web Development, Cisco Networking, and Data Structures*) are modeled natively using optimized structures:
-
-```javascript
-const tutores = [
-  {
-    id: 1,
-    nombre: "Jorge Mateo Rangel Moreno",
-    materia: "Bases de Datos (PostgreSQL / MongoDB)",
-    calificacion: 4.9,
-    precio: "$150/hr",
-    foto: "[https://i.pravatar.cc/150?img=11](https://i.pravatar.cc/150?img=11)"
-  },
-  {
-    id: 2,
-    nombre: "Ana Sofía Valdez",
-    materia: "Desarrollo Web (Vue & Laravel)",
-    calificacion: 5.0,
-    precio: "$180/hr",
-    foto: "[https://i.pravatar.cc/150?img=5](https://i.pravatar.cc/150?img=5)"
-  }
-  // ... extra mock data
-];
-```
-
-## ⚙️ Local Installation & Setup
-
-Since this is a pure client-side application, it does not require complex backend servers (like Node.js or PHP) to execute:
-
-1. Clone this repository to your local machine:
-   ```bash
-   git clone [https://github.com/your-username/tutor-mx.git](https://github.com/your-username/tutor-mx.git)
-   ```
-2. Navigate into the project directory.
-3. Simply double-click or open `index.html` using your preferred web browser (or launch it via an extension like *Live Server* in VS Code).
+El proyecto está estructurado como un **monorepositorio dockerizado**, separando la API REST (Backend en Laravel) y la interfaz SPA (Frontend en Vue.js 3).
 
 ---
-**Developed by:** Israel Ramírez Morales & Gabriel Chacón Arellano – Computer Systems Engineering Students at [Instituto Tecnológico de Morelia](https://www.morelia.tecnm.mx/).
+
+## 🚀 Arquitectura y Tecnologías
+
+El sistema implementa una arquitectura moderna de software con desacoplamiento total:
+
+* **Backend**: Construido con **PHP Laravel**, exponiendo una API REST robusta, utilizando Eloquent ORM para la interacción de datos y validaciones avanzadas en solicitudes HTTP.
+* **Frontend**: SPA reactiva construida con **Vue.js 3 (Composition API)**, utilizando **Vite** para la compilación rápida y **Pinia** para la gestión centralizada del estado de sesión.
+* **Base de Datos**: PostgreSQL alojada de forma serverless en **Neon**, garantizando alta disponibilidad, escalabilidad y conexiones SSL seguras.
+* **Contenerización**: Orquestación completa mediante **Docker y Docker Compose**, permitiendo un entorno homogéneo y portable de desarrollo con soporte para *Hot-Reload* (recarga en caliente).
+
+---
+
+## 🗺️ Roadmap del Proyecto y Sprints
+
+El desarrollo de la plataforma se divide en tres fases incrementales bien definidas:
+
+### 📅 Sprint 1: Bases Técnicas y Autenticación
+**Objetivo:** Construir la infraestructura base, configurar la base de datos relacional y desarrollar el flujo completo de autenticación y consulta inicial.
+* **Estructura del Proyecto:** Configuración del repositorio, Docker Compose, Git Flow, dependencias iniciales y andamiaje de Laravel y Vue 3.
+* **Base de Datos & Neon:** Diseño de tablas relacionales, llaves primarias/foráneas, índices de búsqueda y migraciones iniciales a Neon.
+* **Autenticación Completa (JWT):**
+  * Registro de usuarios con validación obligatoria de correo institucional (filtrado por dominio universitario).
+  * Inicio de sesión seguro con generación de Tokens JWT y manejo centralizado de errores.
+  * Middleware JWT para validación y persistencia de sesión activa (endpoint `/me` e interfaz local).
+* **Gestión de Universidades y Materias:** Catálogo interactivo de materias y universidades, desplegando tarjetas de materias destacadas en el Home con promedio de ratings y contadores.
+* **Perfil de Usuario:** Actualización de información básica, biografía y carga de foto de perfil.
+* **Calidad:** Pruebas unitarias e integración de flujos principales.
+
+---
+
+### 📅 Sprint 2: Búsqueda y Descubrimiento
+**Objetivo:** Implementar la búsqueda avanzada de asesores y los perfiles públicos detallados para completar la experiencia de descubrimiento.
+* **Búsqueda Avanzada de Tutores:** Filtros interactivos de búsqueda en tiempo real por nombre de tutor, materias impartidas, áreas de especialidad, universidad de origen y disponibilidad horaria.
+* **Perfil Público de Tutor:** Panel detallado con información profesional, historial de materias del tutor, biografía, calificaciones promedio obtenidas y estadísticas de desempeño.
+* **Detalle de Materias:** Vista expandible que despliega el temario oficial de la materia y el listado de tutores destacados que la imparten.
+* **Dashboard Avanzado:** Integración de rankings, destacando a los tutores recomendados y mejor valorados en el Home.
+
+---
+
+### 📅 Sprint 3: Interacción, Reputación y Validación
+**Objetivo:** Desarrollar las herramientas de comunicación, gestión de reputación y el flujo administrativo para la postulación de tutores.
+* **Mensajería en Tiempo Real:** Canal de comunicación integrado que permite conversaciones directas y persistentes entre estudiantes y tutores (creación automática de chats desde el perfil).
+* **Postulación de Tutores:** Flujo para que un usuario convencional solicite convertirse en tutor, incluyendo la carga digital de certificados y documentos para su revisión y aprobación por parte del administrador.
+* **Gestión de Logros Académicos:** CRUD para que los tutores agreguen reconocimientos y certificaciones a sus perfiles públicos.
+* **Evaluación y Reviews:** Sistema de retroalimentación donde el estudiante califica el desempeño del tutor con escala de estrellas (ratings) y comentarios tras finalizar cada asesoría.
+* **Flujo Post-Asesoría:** Automatización del envío de notificaciones de evaluación al concluir las sesiones para actualizar dinámicamente la reputación del tutor.
+
+---
+**Desarrolladores del Proyecto:** Israel Ramírez Morales & Gabriel Chacón Arellano.

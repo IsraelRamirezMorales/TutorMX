@@ -1,0 +1,816 @@
+{
+    "tables": {
+        "achievements": {
+            "name": "achievements",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "nullable": "NO",
+                    "default": "nextval('achievements_id_seq'::regclass)",
+                    "is_pk": true,
+                    "fk_target": null
+                },
+                {
+                    "name": "user_id",
+                    "type": "bigint",
+                    "nullable": "NO",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": "users.id"
+                },
+                {
+                    "name": "title",
+                    "type": "character varying",
+                    "nullable": "NO",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": null
+                },
+                {
+                    "name": "institution",
+                    "type": "character varying",
+                    "nullable": "YES",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": null
+                },
+                {
+                    "name": "achievement_year",
+                    "type": "integer",
+                    "nullable": "YES",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": null
+                },
+                {
+                    "name": "description",
+                    "type": "text",
+                    "nullable": "YES",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": null
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp without time zone",
+                    "nullable": "YES",
+                    "default": "CURRENT_TIMESTAMP",
+                    "is_pk": false,
+                    "fk_target": null
+                }
+            ]
+        },
+        "conversations": {
+            "name": "conversations",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "nullable": "NO",
+                    "default": "nextval('conversations_id_seq'::regclass)",
+                    "is_pk": true,
+                    "fk_target": null
+                },
+                {
+                    "name": "student_id",
+                    "type": "bigint",
+                    "nullable": "NO",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": "users.id"
+                },
+                {
+                    "name": "tutor_id",
+                    "type": "bigint",
+                    "nullable": "NO",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": "users.id"
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp without time zone",
+                    "nullable": "NO",
+                    "default": "CURRENT_TIMESTAMP",
+                    "is_pk": false,
+                    "fk_target": null
+                }
+            ]
+        },
+        "documents": {
+            "name": "documents",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "nullable": "NO",
+                    "default": "nextval('documents_id_seq'::regclass)",
+                    "is_pk": true,
+                    "fk_target": null
+                },
+                {
+                    "name": "user_id",
+                    "type": "bigint",
+                    "nullable": "NO",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": "users.id"
+                },
+                {
+                    "name": "document_type",
+                    "type": "document_type_t",
+                    "nullable": "NO",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": null
+                },
+                {
+                    "name": "file_url",
+                    "type": "text",
+                    "nullable": "NO",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": null
+                },
+                {
+                    "name": "status",
+                    "type": "document_status_t",
+                    "nullable": "NO",
+                    "default": "'PENDING'::document_status_t",
+                    "is_pk": false,
+                    "fk_target": null
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp without time zone",
+                    "nullable": "NO",
+                    "default": "CURRENT_TIMESTAMP",
+                    "is_pk": false,
+                    "fk_target": null
+                },
+                {
+                    "name": "reviewed_at",
+                    "type": "timestamp without time zone",
+                    "nullable": "YES",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": null
+                }
+            ]
+        },
+        "messages": {
+            "name": "messages",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "nullable": "NO",
+                    "default": "nextval('messages_id_seq'::regclass)",
+                    "is_pk": true,
+                    "fk_target": null
+                },
+                {
+                    "name": "conversation_id",
+                    "type": "bigint",
+                    "nullable": "NO",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": "conversations.id"
+                },
+                {
+                    "name": "sender_id",
+                    "type": "bigint",
+                    "nullable": "NO",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": "users.id"
+                },
+                {
+                    "name": "message",
+                    "type": "text",
+                    "nullable": "NO",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": null
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp without time zone",
+                    "nullable": "NO",
+                    "default": "CURRENT_TIMESTAMP",
+                    "is_pk": false,
+                    "fk_target": null
+                }
+            ]
+        },
+        "reviews": {
+            "name": "reviews",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "nullable": "NO",
+                    "default": "nextval('reviews_id_seq'::regclass)",
+                    "is_pk": true,
+                    "fk_target": null
+                },
+                {
+                    "name": "tutor_id",
+                    "type": "bigint",
+                    "nullable": "NO",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": "users.id"
+                },
+                {
+                    "name": "student_id",
+                    "type": "bigint",
+                    "nullable": "NO",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": "users.id"
+                },
+                {
+                    "name": "tutoring_session_id",
+                    "type": "bigint",
+                    "nullable": "YES",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": "tutoring_sessions.id"
+                },
+                {
+                    "name": "rating",
+                    "type": "smallint",
+                    "nullable": "NO",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": null
+                },
+                {
+                    "name": "comment",
+                    "type": "text",
+                    "nullable": "YES",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": null
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp without time zone",
+                    "nullable": "YES",
+                    "default": "CURRENT_TIMESTAMP",
+                    "is_pk": false,
+                    "fk_target": null
+                }
+            ]
+        },
+        "subjects": {
+            "name": "subjects",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "nullable": "NO",
+                    "default": "nextval('subjects_id_seq'::regclass)",
+                    "is_pk": true,
+                    "fk_target": null
+                },
+                {
+                    "name": "name",
+                    "type": "character varying",
+                    "nullable": "NO",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": null
+                },
+                {
+                    "name": "description",
+                    "type": "text",
+                    "nullable": "YES",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": null
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp without time zone",
+                    "nullable": "NO",
+                    "default": "CURRENT_TIMESTAMP",
+                    "is_pk": false,
+                    "fk_target": null
+                }
+            ]
+        },
+        "tutor_availability": {
+            "name": "tutor_availability",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "nullable": "NO",
+                    "default": "nextval('tutor_availability_id_seq'::regclass)",
+                    "is_pk": true,
+                    "fk_target": null
+                },
+                {
+                    "name": "user_id",
+                    "type": "bigint",
+                    "nullable": "NO",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": "users.id"
+                },
+                {
+                    "name": "day_of_week",
+                    "type": "smallint",
+                    "nullable": "NO",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": null
+                },
+                {
+                    "name": "start_time",
+                    "type": "time without time zone",
+                    "nullable": "NO",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": null
+                },
+                {
+                    "name": "end_time",
+                    "type": "time without time zone",
+                    "nullable": "NO",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": null
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp without time zone",
+                    "nullable": "YES",
+                    "default": "CURRENT_TIMESTAMP",
+                    "is_pk": false,
+                    "fk_target": null
+                }
+            ]
+        },
+        "tutoring_sessions": {
+            "name": "tutoring_sessions",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "nullable": "NO",
+                    "default": "nextval('tutoring_sessions_id_seq'::regclass)",
+                    "is_pk": true,
+                    "fk_target": null
+                },
+                {
+                    "name": "student_id",
+                    "type": "bigint",
+                    "nullable": "NO",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": "users.id"
+                },
+                {
+                    "name": "tutor_id",
+                    "type": "bigint",
+                    "nullable": "NO",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": "users.id"
+                },
+                {
+                    "name": "subject_id",
+                    "type": "bigint",
+                    "nullable": "NO",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": "subjects.id"
+                },
+                {
+                    "name": "scheduled_at",
+                    "type": "timestamp without time zone",
+                    "nullable": "NO",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": null
+                },
+                {
+                    "name": "location",
+                    "type": "character varying",
+                    "nullable": "NO",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": null
+                },
+                {
+                    "name": "status",
+                    "type": "tutoring_status_t",
+                    "nullable": "NO",
+                    "default": "'PENDING'::tutoring_status_t",
+                    "is_pk": false,
+                    "fk_target": null
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp without time zone",
+                    "nullable": "NO",
+                    "default": "CURRENT_TIMESTAMP",
+                    "is_pk": false,
+                    "fk_target": null
+                }
+            ]
+        },
+        "universities": {
+            "name": "universities",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "nullable": "NO",
+                    "default": "nextval('universities_id_seq'::regclass)",
+                    "is_pk": true,
+                    "fk_target": null
+                },
+                {
+                    "name": "name",
+                    "type": "character varying",
+                    "nullable": "NO",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": null
+                },
+                {
+                    "name": "institutional_domain",
+                    "type": "character varying",
+                    "nullable": "NO",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": null
+                },
+                {
+                    "name": "is_active",
+                    "type": "boolean",
+                    "nullable": "NO",
+                    "default": "true",
+                    "is_pk": false,
+                    "fk_target": null
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp without time zone",
+                    "nullable": "NO",
+                    "default": "CURRENT_TIMESTAMP",
+                    "is_pk": false,
+                    "fk_target": null
+                }
+            ]
+        },
+        "user_subjects": {
+            "name": "user_subjects",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "nullable": "NO",
+                    "default": "nextval('user_subjects_id_seq'::regclass)",
+                    "is_pk": true,
+                    "fk_target": null
+                },
+                {
+                    "name": "user_id",
+                    "type": "bigint",
+                    "nullable": "NO",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": "users.id"
+                },
+                {
+                    "name": "subject_id",
+                    "type": "bigint",
+                    "nullable": "NO",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": "subjects.id"
+                },
+                {
+                    "name": "relationship_type",
+                    "type": "subject_relationship_t",
+                    "nullable": "NO",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": null
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp without time zone",
+                    "nullable": "NO",
+                    "default": "CURRENT_TIMESTAMP",
+                    "is_pk": false,
+                    "fk_target": null
+                }
+            ]
+        },
+        "user_universities": {
+            "name": "user_universities",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "nullable": "NO",
+                    "default": "nextval('user_universities_id_seq'::regclass)",
+                    "is_pk": true,
+                    "fk_target": null
+                },
+                {
+                    "name": "user_id",
+                    "type": "bigint",
+                    "nullable": "NO",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": "users.id"
+                },
+                {
+                    "name": "university_id",
+                    "type": "bigint",
+                    "nullable": "NO",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": "universities.id"
+                },
+                {
+                    "name": "relationship_type",
+                    "type": "university_relationship_t",
+                    "nullable": "NO",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": null
+                },
+                {
+                    "name": "is_primary",
+                    "type": "boolean",
+                    "nullable": "NO",
+                    "default": "false",
+                    "is_pk": false,
+                    "fk_target": null
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp without time zone",
+                    "nullable": "NO",
+                    "default": "CURRENT_TIMESTAMP",
+                    "is_pk": false,
+                    "fk_target": null
+                }
+            ]
+        },
+        "users": {
+            "name": "users",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "nullable": "NO",
+                    "default": "nextval('users_id_seq'::regclass)",
+                    "is_pk": true,
+                    "fk_target": null
+                },
+                {
+                    "name": "name",
+                    "type": "character varying",
+                    "nullable": "NO",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": null
+                },
+                {
+                    "name": "lastname",
+                    "type": "character varying",
+                    "nullable": "NO",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": null
+                },
+                {
+                    "name": "email",
+                    "type": "character varying",
+                    "nullable": "NO",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": null
+                },
+                {
+                    "name": "password",
+                    "type": "character varying",
+                    "nullable": "NO",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": null
+                },
+                {
+                    "name": "role",
+                    "type": "system_role_t",
+                    "nullable": "NO",
+                    "default": "'USER'::system_role_t",
+                    "is_pk": false,
+                    "fk_target": null
+                },
+                {
+                    "name": "verification_status",
+                    "type": "verification_status_t",
+                    "nullable": "NO",
+                    "default": "'PENDING'::verification_status_t",
+                    "is_pk": false,
+                    "fk_target": null
+                },
+                {
+                    "name": "is_tutor",
+                    "type": "boolean",
+                    "nullable": "NO",
+                    "default": "false",
+                    "is_pk": false,
+                    "fk_target": null
+                },
+                {
+                    "name": "bio",
+                    "type": "text",
+                    "nullable": "YES",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": null
+                },
+                {
+                    "name": "profile_image_url",
+                    "type": "text",
+                    "nullable": "YES",
+                    "default": null,
+                    "is_pk": false,
+                    "fk_target": null
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp without time zone",
+                    "nullable": "NO",
+                    "default": "CURRENT_TIMESTAMP",
+                    "is_pk": false,
+                    "fk_target": null
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp without time zone",
+                    "nullable": "NO",
+                    "default": "CURRENT_TIMESTAMP",
+                    "is_pk": false,
+                    "fk_target": null
+                }
+            ]
+        }
+    },
+    "enums": {
+        "document_status_t": [
+            "PENDING",
+            "APPROVED",
+            "DECLINED"
+        ],
+        "document_type_t": [
+            "INE",
+            "STUDENT_ID",
+            "PROOF_OF_ENROLLMENT",
+            "OTHER"
+        ],
+        "subject_relationship_t": [
+            "LEARNING",
+            "TEACHING"
+        ],
+        "system_role_t": [
+            "USER",
+            "ADMIN"
+        ],
+        "tutoring_status_t": [
+            "PENDING",
+            "ACCEPTED",
+            "REJECTED",
+            "COMPLETED",
+            "CANCELLED"
+        ],
+        "university_relationship_t": [
+            "STUDENT",
+            "TUTOR",
+            "PROFESSOR",
+            "EMPLOYEE",
+            "ALUMNI"
+        ],
+        "verification_status_t": [
+            "PENDING",
+            "APPROVED",
+            "DECLINED"
+        ]
+    },
+    "foreign_keys": [
+        {
+            "source_table": "user_universities",
+            "source_column": "user_id",
+            "target_table": "users",
+            "target_column": "id"
+        },
+        {
+            "source_table": "user_universities",
+            "source_column": "university_id",
+            "target_table": "universities",
+            "target_column": "id"
+        },
+        {
+            "source_table": "user_subjects",
+            "source_column": "user_id",
+            "target_table": "users",
+            "target_column": "id"
+        },
+        {
+            "source_table": "user_subjects",
+            "source_column": "subject_id",
+            "target_table": "subjects",
+            "target_column": "id"
+        },
+        {
+            "source_table": "documents",
+            "source_column": "user_id",
+            "target_table": "users",
+            "target_column": "id"
+        },
+        {
+            "source_table": "tutoring_sessions",
+            "source_column": "student_id",
+            "target_table": "users",
+            "target_column": "id"
+        },
+        {
+            "source_table": "tutoring_sessions",
+            "source_column": "tutor_id",
+            "target_table": "users",
+            "target_column": "id"
+        },
+        {
+            "source_table": "tutoring_sessions",
+            "source_column": "subject_id",
+            "target_table": "subjects",
+            "target_column": "id"
+        },
+        {
+            "source_table": "conversations",
+            "source_column": "student_id",
+            "target_table": "users",
+            "target_column": "id"
+        },
+        {
+            "source_table": "conversations",
+            "source_column": "tutor_id",
+            "target_table": "users",
+            "target_column": "id"
+        },
+        {
+            "source_table": "messages",
+            "source_column": "conversation_id",
+            "target_table": "conversations",
+            "target_column": "id"
+        },
+        {
+            "source_table": "messages",
+            "source_column": "sender_id",
+            "target_table": "users",
+            "target_column": "id"
+        },
+        {
+            "source_table": "achievements",
+            "source_column": "user_id",
+            "target_table": "users",
+            "target_column": "id"
+        },
+        {
+            "source_table": "reviews",
+            "source_column": "tutor_id",
+            "target_table": "users",
+            "target_column": "id"
+        },
+        {
+            "source_table": "reviews",
+            "source_column": "student_id",
+            "target_table": "users",
+            "target_column": "id"
+        },
+        {
+            "source_table": "reviews",
+            "source_column": "tutoring_session_id",
+            "target_table": "tutoring_sessions",
+            "target_column": "id"
+        },
+        {
+            "source_table": "tutor_availability",
+            "source_column": "user_id",
+            "target_table": "users",
+            "target_column": "id"
+        }
+    ]
+}

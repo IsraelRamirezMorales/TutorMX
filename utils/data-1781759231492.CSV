@@ -1,0 +1,77 @@
+"table_name","column_name","data_type","is_nullable","column_default"
+"achievements","id","bigint","NO","nextval('achievements_id_seq'::regclass)"
+"achievements","user_id","bigint","NO",NULL
+"achievements","title","character varying","NO",NULL
+"achievements","institution","character varying","YES",NULL
+"achievements","achievement_year","integer","YES",NULL
+"achievements","description","text","YES",NULL
+"achievements","created_at","timestamp without time zone","YES","CURRENT_TIMESTAMP"
+"conversations","id","bigint","NO","nextval('conversations_id_seq'::regclass)"
+"conversations","student_id","bigint","NO",NULL
+"conversations","tutor_id","bigint","NO",NULL
+"conversations","created_at","timestamp without time zone","NO","CURRENT_TIMESTAMP"
+"documents","id","bigint","NO","nextval('documents_id_seq'::regclass)"
+"documents","user_id","bigint","NO",NULL
+"documents","document_type","USER-DEFINED","NO",NULL
+"documents","file_url","text","NO",NULL
+"documents","status","USER-DEFINED","NO","'PENDING'::document_status_t"
+"documents","created_at","timestamp without time zone","NO","CURRENT_TIMESTAMP"
+"documents","reviewed_at","timestamp without time zone","YES",NULL
+"messages","id","bigint","NO","nextval('messages_id_seq'::regclass)"
+"messages","conversation_id","bigint","NO",NULL
+"messages","sender_id","bigint","NO",NULL
+"messages","message","text","NO",NULL
+"messages","created_at","timestamp without time zone","NO","CURRENT_TIMESTAMP"
+"reviews","id","bigint","NO","nextval('reviews_id_seq'::regclass)"
+"reviews","tutor_id","bigint","NO",NULL
+"reviews","student_id","bigint","NO",NULL
+"reviews","tutoring_session_id","bigint","YES",NULL
+"reviews","rating","smallint","NO",NULL
+"reviews","comment","text","YES",NULL
+"reviews","created_at","timestamp without time zone","YES","CURRENT_TIMESTAMP"
+"subjects","id","bigint","NO","nextval('subjects_id_seq'::regclass)"
+"subjects","name","character varying","NO",NULL
+"subjects","description","text","YES",NULL
+"subjects","created_at","timestamp without time zone","NO","CURRENT_TIMESTAMP"
+"tutor_availability","id","bigint","NO","nextval('tutor_availability_id_seq'::regclass)"
+"tutor_availability","user_id","bigint","NO",NULL
+"tutor_availability","day_of_week","smallint","NO",NULL
+"tutor_availability","start_time","time without time zone","NO",NULL
+"tutor_availability","end_time","time without time zone","NO",NULL
+"tutor_availability","created_at","timestamp without time zone","YES","CURRENT_TIMESTAMP"
+"tutoring_sessions","id","bigint","NO","nextval('tutoring_sessions_id_seq'::regclass)"
+"tutoring_sessions","student_id","bigint","NO",NULL
+"tutoring_sessions","tutor_id","bigint","NO",NULL
+"tutoring_sessions","subject_id","bigint","NO",NULL
+"tutoring_sessions","scheduled_at","timestamp without time zone","NO",NULL
+"tutoring_sessions","location","character varying","NO",NULL
+"tutoring_sessions","status","USER-DEFINED","NO","'PENDING'::tutoring_status_t"
+"tutoring_sessions","created_at","timestamp without time zone","NO","CURRENT_TIMESTAMP"
+"universities","id","bigint","NO","nextval('universities_id_seq'::regclass)"
+"universities","name","character varying","NO",NULL
+"universities","institutional_domain","character varying","NO",NULL
+"universities","is_active","boolean","NO","true"
+"universities","created_at","timestamp without time zone","NO","CURRENT_TIMESTAMP"
+"user_subjects","id","bigint","NO","nextval('user_subjects_id_seq'::regclass)"
+"user_subjects","user_id","bigint","NO",NULL
+"user_subjects","subject_id","bigint","NO",NULL
+"user_subjects","relationship_type","USER-DEFINED","NO",NULL
+"user_subjects","created_at","timestamp without time zone","NO","CURRENT_TIMESTAMP"
+"user_universities","id","bigint","NO","nextval('user_universities_id_seq'::regclass)"
+"user_universities","user_id","bigint","NO",NULL
+"user_universities","university_id","bigint","NO",NULL
+"user_universities","relationship_type","USER-DEFINED","NO",NULL
+"user_universities","is_primary","boolean","NO","false"
+"user_universities","created_at","timestamp without time zone","NO","CURRENT_TIMESTAMP"
+"users","id","bigint","NO","nextval('users_id_seq'::regclass)"
+"users","name","character varying","NO",NULL
+"users","lastname","character varying","NO",NULL
+"users","email","character varying","NO",NULL
+"users","password","character varying","NO",NULL
+"users","role","USER-DEFINED","NO","'USER'::system_role_t"
+"users","verification_status","USER-DEFINED","NO","'PENDING'::verification_status_t"
+"users","is_tutor","boolean","NO","false"
+"users","bio","text","YES",NULL
+"users","profile_image_url","text","YES",NULL
+"users","created_at","timestamp without time zone","NO","CURRENT_TIMESTAMP"
+"users","updated_at","timestamp without time zone","NO","CURRENT_TIMESTAMP"

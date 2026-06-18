@@ -1,0 +1,77 @@
+table_name,column_name,data_type,is_nullable,column_default,is_primary_key,foreign_key_target
+achievements,id,bigint,NO,nextval('achievements_id_seq'::regclass),YES,
+achievements,user_id,bigint,NO,,NO,users.id
+achievements,title,character varying,NO,,NO,
+achievements,institution,character varying,YES,,NO,
+achievements,achievement_year,integer,YES,,NO,
+achievements,description,text,YES,,NO,
+achievements,created_at,timestamp without time zone,YES,CURRENT_TIMESTAMP,NO,
+conversations,id,bigint,NO,nextval('conversations_id_seq'::regclass),YES,
+conversations,student_id,bigint,NO,,NO,users.id
+conversations,tutor_id,bigint,NO,,NO,users.id
+conversations,created_at,timestamp without time zone,NO,CURRENT_TIMESTAMP,NO,
+documents,id,bigint,NO,nextval('documents_id_seq'::regclass),YES,
+documents,user_id,bigint,NO,,NO,users.id
+documents,document_type,document_type_t,NO,,NO,
+documents,file_url,text,NO,,NO,
+documents,status,document_status_t,NO,'PENDING'::document_status_t,NO,
+documents,created_at,timestamp without time zone,NO,CURRENT_TIMESTAMP,NO,
+documents,reviewed_at,timestamp without time zone,YES,,NO,
+messages,id,bigint,NO,nextval('messages_id_seq'::regclass),YES,
+messages,conversation_id,bigint,NO,,NO,conversations.id
+messages,sender_id,bigint,NO,,NO,users.id
+messages,message,text,NO,,NO,
+messages,created_at,timestamp without time zone,NO,CURRENT_TIMESTAMP,NO,
+reviews,id,bigint,NO,nextval('reviews_id_seq'::regclass),YES,
+reviews,tutor_id,bigint,NO,,NO,users.id
+reviews,student_id,bigint,NO,,NO,users.id
+reviews,tutoring_session_id,bigint,YES,,NO,tutoring_sessions.id
+reviews,rating,smallint,NO,,NO,
+reviews,comment,text,YES,,NO,
+reviews,created_at,timestamp without time zone,YES,CURRENT_TIMESTAMP,NO,
+subjects,id,bigint,NO,nextval('subjects_id_seq'::regclass),YES,
+subjects,name,character varying,NO,,NO,
+subjects,description,text,YES,,NO,
+subjects,created_at,timestamp without time zone,NO,CURRENT_TIMESTAMP,NO,
+tutor_availability,id,bigint,NO,nextval('tutor_availability_id_seq'::regclass),YES,
+tutor_availability,user_id,bigint,NO,,NO,users.id
+tutor_availability,day_of_week,smallint,NO,,NO,
+tutor_availability,start_time,time without time zone,NO,,NO,
+tutor_availability,end_time,time without time zone,NO,,NO,
+tutor_availability,created_at,timestamp without time zone,YES,CURRENT_TIMESTAMP,NO,
+tutoring_sessions,id,bigint,NO,nextval('tutoring_sessions_id_seq'::regclass),YES,
+tutoring_sessions,student_id,bigint,NO,,NO,users.id
+tutoring_sessions,tutor_id,bigint,NO,,NO,users.id
+tutoring_sessions,subject_id,bigint,NO,,NO,subjects.id
+tutoring_sessions,scheduled_at,timestamp without time zone,NO,,NO,
+tutoring_sessions,location,character varying,NO,,NO,
+tutoring_sessions,status,tutoring_status_t,NO,'PENDING'::tutoring_status_t,NO,
+tutoring_sessions,created_at,timestamp without time zone,NO,CURRENT_TIMESTAMP,NO,
+universities,id,bigint,NO,nextval('universities_id_seq'::regclass),YES,
+universities,name,character varying,NO,,NO,
+universities,institutional_domain,character varying,NO,,NO,
+universities,is_active,boolean,NO,true,NO,
+universities,created_at,timestamp without time zone,NO,CURRENT_TIMESTAMP,NO,
+user_subjects,id,bigint,NO,nextval('user_subjects_id_seq'::regclass),YES,
+user_subjects,user_id,bigint,NO,,NO,users.id
+user_subjects,subject_id,bigint,NO,,NO,subjects.id
+user_subjects,relationship_type,subject_relationship_t,NO,,NO,
+user_subjects,created_at,timestamp without time zone,NO,CURRENT_TIMESTAMP,NO,
+user_universities,id,bigint,NO,nextval('user_universities_id_seq'::regclass),YES,
+user_universities,user_id,bigint,NO,,NO,users.id
+user_universities,university_id,bigint,NO,,NO,universities.id
+user_universities,relationship_type,university_relationship_t,NO,,NO,
+user_universities,is_primary,boolean,NO,false,NO,
+user_universities,created_at,timestamp without time zone,NO,CURRENT_TIMESTAMP,NO,
+users,id,bigint,NO,nextval('users_id_seq'::regclass),YES,
+users,name,character varying,NO,,NO,
+users,lastname,character varying,NO,,NO,
+users,email,character varying,NO,,NO,
+users,password,character varying,NO,,NO,
+users,role,system_role_t,NO,'USER'::system_role_t,NO,
+users,verification_status,verification_status_t,NO,'PENDING'::verification_status_t,NO,
+users,is_tutor,boolean,NO,false,NO,
+users,bio,text,YES,,NO,
+users,profile_image_url,text,YES,,NO,
+users,created_at,timestamp without time zone,NO,CURRENT_TIMESTAMP,NO,
+users,updated_at,timestamp without time zone,NO,CURRENT_TIMESTAMP,NO,

@@ -1,20 +1,33 @@
 version: '3.8'
 
 services:
-  web:
+  # Frontend service running Vue 3 / Vite (Dev environment)
+  frontend:
     build:
-      context: .
+      context: ./frontend
       dockerfile: Dockerfile
-    container_name: tutormx_web
+    container_name: tutormx_frontend
     ports:
-      - "3000:3000"
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
     environment:
-      - NODE_ENV=production
-    restart: always
+      - NODE_ENV=development
+    restart: unless-stopped
 
-# Para correr en modo desarrollo con recarga en vivo (live reload), puedes modificar la sección 'web' a:
-#   command: npm run dev
-#   volumes:
-#     - .:/app
-#     - /app/node_modules
-#     - /app/.next
+  # Backend service running PHP Laravel API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: tutormx_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - /app/vendor
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+    restart: unless-stopped
