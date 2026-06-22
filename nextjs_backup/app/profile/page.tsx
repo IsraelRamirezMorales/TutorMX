@@ -114,7 +114,7 @@ export default function ProfilePage() {
   const [isOwnProfile] = useState(true) // In a real app, this would be determined by auth
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-16 md:pb-0">
       <Navbar />
 
       <div className="mx-auto max-w-5xl px-4 py-8">
@@ -204,7 +204,7 @@ export default function ProfilePage() {
 
         {/* Tabs Section */}
         <Tabs defaultValue="about" className="space-y-6">
-          <TabsList className="w-full justify-start">
+          <TabsList className="w-full justify-start overflow-x-auto overflow-y-hidden">
             <TabsTrigger value="about">About</TabsTrigger>
             <TabsTrigger value="achievements">Achievements</TabsTrigger>
             <TabsTrigger value="reviews">Reviews</TabsTrigger>
