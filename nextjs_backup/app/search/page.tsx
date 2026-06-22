@@ -123,7 +123,7 @@ export default function SearchPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-16 md:pb-0">
       <Navbar />
 
       <div className="mx-auto max-w-7xl px-4 py-8">

@@ -59,7 +59,7 @@ export function Navbar() {
       </div>
 
       {/* Mobile Navigation */}
-      <div className="flex items-center justify-around border-t border-white/10 py-2 md:hidden">
+      <div className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around border-t border-white/10 bg-accent py-2 md:hidden">
         {navItems.map((item) => {
           const Icon = item.icon
           const isActive = pathname === item.href

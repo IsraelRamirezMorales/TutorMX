@@ -147,7 +147,7 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="flex h-screen flex-col bg-background">
+    <div className="flex h-[100dvh] flex-col bg-background pb-16 md:pb-0">
       <Navbar />
 
       {/* Warning Banner */}
