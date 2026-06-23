@@ -6,7 +6,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: tutormx_frontend
+    container_name: Tu_Asesoria_frontend
     ports:
       - "5173:5173"
     volumes:
@@ -21,7 +21,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: tutormx_backend
+    container_name: Tu_Asesoria_backend
     ports:
       - "8000:8000"
     volumes:

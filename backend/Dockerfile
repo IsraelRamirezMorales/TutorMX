@@ -1,8 +1,9 @@
 FROM php:8.4-cli-alpine
 
-# Install PostgreSQL client dev libraries and PDO extensions
-RUN apk add --no-cache postgresql-dev \
-    && docker-php-ext-install pdo pdo_pgsql pgsql
+# Install PostgreSQL client dev libraries, ICU, and PDO extensions
+RUN apk add --no-cache postgresql-dev icu-dev \
+    && docker-php-ext-configure intl \
+    && docker-php-ext-install pdo pdo_pgsql pgsql intl
 
 WORKDIR /app
 
