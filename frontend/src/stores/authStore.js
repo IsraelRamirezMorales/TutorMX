@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import api from '@/services/api'
 
 export const useAuthStore = defineStore('auth', () => {
@@ -7,13 +7,28 @@ export const useAuthStore = defineStore('auth', () => {
   const isAuthenticated = ref(false)
   const token = ref(localStorage.getItem('token') || null)
 
+  // Getters de Roles y Estados
+  const isStudent = computed(() => user.value?.role === 'USER' && !user.value?.is_tutor)
+  const isTutor = computed(() => user.value?.role === 'USER' && user.value?.is_tutor)
+  const isAdmin = computed(() => user.value?.role === 'ADMIN')
+  const isApprovedTutor = computed(() => isTutor.value && user.value?.verification_status === 'APPROVED')
+
   const login = async (credentials) => {
     try {
       // Mock API call for now
       // const response = await api.post('/auth/login', credentials)
       
-      // Simulate successful login
-      const mockResponse = { user: { id: 1, name: 'Student' }, token: 'mock-token' }
+      // Simulate successful login (modificado para incluir atributos de rol para pruebas)
+      const mockResponse = { 
+        user: { 
+          id: 1, 
+          name: 'Usuario Prueba', 
+          role: 'USER', 
+          is_tutor: false, 
+          verification_status: 'APPROVED' 
+        }, 
+        token: 'mock-token' 
+      }
       setAuth(mockResponse.user, mockResponse.token)
       return true
     } catch (error) {
@@ -40,6 +55,10 @@ export const useAuthStore = defineStore('auth', () => {
     user,
     isAuthenticated,
     token,
+    isStudent,
+    isTutor,
+    isAdmin,
+    isApprovedTutor,
     login,
     logout,
     setAuth
