@@ -1,16 +1,37 @@
 <script setup>
 import { useRoute } from 'vue-router'
-import { Home, Search, MessageCircle, User, LogOut } from '@lucide/vue'
+import { Home, Search, MessageCircle, User, LogOut, Shield, Briefcase } from '@lucide/vue'
 import { cn } from '@/lib/utils'
+import { useAuthStore } from '@/stores/authStore'
+import { computed } from 'vue'
 
 const route = useRoute()
+const authStore = useAuthStore()
 
-const navItems = [
-  { href: "/home", label: "Home", icon: Home },
-  { href: "/search", label: "Search", icon: Search },
-  { href: "/chat", label: "Messages", icon: MessageCircle },
-  { href: "/profile", label: "Profile", icon: User },
-]
+const navItems = computed(() => {
+  const items = []
+  
+  if (authStore.isAdmin) {
+    items.push({ href: "/admin/validate-tutors", label: "Validar Tutores", icon: Shield })
+    items.push({ href: "/admin/dashboard", label: "Panel Administrativo", icon: User })
+    return items
+  }
+
+  items.push({ href: "/home", label: "Home", icon: Home })
+  
+  if (authStore.isStudent) {
+    items.push({ href: "/search", label: "Search", icon: Search })
+  }
+
+  items.push({ href: "/chat", label: "Messages", icon: MessageCircle })
+  items.push({ href: "/profile", label: "Profile", icon: User })
+
+  if (authStore.isTutor) {
+    items.push({ href: "/advisories-management", label: "Asesorías", icon: Briefcase })
+  }
+
+  return items
+})
 </script>
 
 <template>
