@@ -15,13 +15,31 @@ const routes = [
         path: 'home',
         name: 'home',
         component: () => import('@/views/home/HomeView.vue'),
-        meta: { requiresAuth: true }
+        meta: { requiresAuth: false } // Temporalmente deshabilitado para desarrollo
       },
       {
         path: 'search',
         name: 'search',
         component: () => import('@/views/search/SearchView.vue'),
-        meta: { requiresAuth: true, role: 'STUDENT' }
+        meta: { requiresAuth: false }
+      },
+      {
+        path: 'tutors',
+        name: 'tutors',
+        component: () => import('@/views/tutors/TutorsView.vue'),
+        meta: { requiresAuth: false }
+      },
+      {
+        path: 'professors',
+        name: 'professors',
+        component: () => import('@/views/tutors/ProfessorsView.vue'),
+        meta: { requiresAuth: false }
+      },
+      {
+        path: 'subjects',
+        name: 'subjects',
+        component: () => import('@/views/subjects/SubjectsView.vue'),
+        meta: { requiresAuth: false }
       },
       {
         path: 'chat',
@@ -34,6 +52,12 @@ const routes = [
         name: 'profile',
         component: () => import('@/views/profile/ProfileView.vue'),
         meta: { requiresAuth: true }
+      },
+      {
+        path: 'profile/:id',
+        name: 'public-profile',
+        component: () => import('@/views/profile/PublicProfileView.vue'),
+        meta: { requiresAuth: false }
       },
       // Ejemplos de rutas para Tutor y Admin (Sprint 2)
       {

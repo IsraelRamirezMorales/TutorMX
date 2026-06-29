@@ -1,60 +1,105 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import Button from '@/components/ui/Button.vue'
 import Input from '@/components/ui/Input.vue'
 import Card from '@/components/ui/Card.vue'
+import CardHeader from '@/components/ui/CardHeader.vue'
+import CardTitle from '@/components/ui/CardTitle.vue'
+import CardDescription from '@/components/ui/CardDescription.vue'
 import CardContent from '@/components/ui/CardContent.vue'
-import Badge from '@/components/ui/Badge.vue'
 import Select from '@/components/ui/Select.vue'
 import SelectTrigger from '@/components/ui/SelectTrigger.vue'
 import SelectValue from '@/components/ui/SelectValue.vue'
 import SelectContent from '@/components/ui/SelectContent.vue'
 import SelectItem from '@/components/ui/SelectItem.vue'
-import Checkbox from '@/components/ui/Checkbox.vue'
-import Label from '@/components/ui/Label.vue'
-import { Search, Star, Filter, X, MapPin, Clock, DollarSign } from '@lucide/vue'
+import { Search, Star, Filter, X, Users, BookOpen, ChevronRight, User as UserIcon, MessageSquare } from '@lucide/vue'
+import api from '@/services/api'
+import { useCacheStore } from '@/stores/cacheStore'
 
 const router = useRouter()
-
-const allTutors = [
-  { id: 1, name: "Dr. María González", subject: "Calculus", specialty: "Differential Calculus", university: "UNAM", rating: 4.9, reviews: 156, price: 250, available: true, image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop&crop=face", bio: "Professor with 10+ years of experience teaching calculus at university level." },
-  { id: 2, name: "Ing. Carlos Mendoza", subject: "Programming", specialty: "Python & JavaScript", university: "Tec de Monterrey", rating: 4.8, reviews: 203, price: 300, available: true, image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face", bio: "Software engineer and full-stack developer with industry experience." },
-  { id: 3, name: "Lic. Ana Rodríguez", subject: "Physics", specialty: "Mechanics", university: "IPN", rating: 4.7, reviews: 89, price: 220, available: false, image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop&crop=face", bio: "Physics researcher specialized in classical mechanics and thermodynamics." },
-  { id: 4, name: "M.Sc. Roberto Sánchez", subject: "Mathematics", specialty: "Linear Algebra", university: "UAM", rating: 4.9, reviews: 134, price: 280, available: true, image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face", bio: "Mathematics graduate with expertise in linear algebra and abstract algebra." },
-  { id: 5, name: "Ing. Laura Martínez", subject: "Databases", specialty: "SQL & MongoDB", university: "Tec de Monterrey", rating: 4.6, reviews: 67, price: 260, available: true, image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop&crop=face", bio: "Database administrator with experience in both relational and NoSQL databases." },
-  { id: 6, name: "Dr. Fernando López", subject: "Software Engineering", specialty: "System Design", university: "UNAM", rating: 4.8, reviews: 178, price: 350, available: true, image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=face", bio: "Senior software architect with 15+ years in the industry." },
-]
-
-const subjects = ["All Subjects", "Calculus", "Programming", "Physics", "Mathematics", "Databases", "Software Engineering"]
-const universities = ["All Universities", "UNAM", "IPN", "Tec de Monterrey", "UAM", "UDG", "Instituto Tecnológico de Morelia"]
+const cacheStore = useCacheStore()
 
 const searchQuery = ref("")
-const selectedSubject = ref("All Subjects")
-const selectedUniversity = ref("All Universities")
-const showAvailableOnly = ref(false)
+const selectedSubject = ref("all")
+const selectedUniversity = ref("all")
+const selectedRole = ref("all")
 const showFilters = ref(false)
 
-const filteredTutors = computed(() => {
-  return allTutors.filter((tutor) => {
-    const searchLower = searchQuery.value.toLowerCase()
-    const matchesSearch = tutor.name.toLowerCase().includes(searchLower) ||
-                          tutor.subject.toLowerCase().includes(searchLower) ||
-                          tutor.specialty.toLowerCase().includes(searchLower)
-    const matchesSubject = selectedSubject.value === "All Subjects" || tutor.subject === selectedSubject.value
-    const matchesUniversity = selectedUniversity.value === "All Universities" || tutor.university === selectedUniversity.value
-    const matchesAvailability = !showAvailableOnly.value || tutor.available
+const subjectsList = ref([])
+const subjectsResults = ref([])
+const professorsResults = ref([])
+const tutorsResults = ref([])
+const loading = ref(true)
 
-    return matchesSearch && matchesSubject && matchesUniversity && matchesAvailability
-  })
-})
+const universities = ["UNAM", "IPN", "Tec de Monterrey", "UAM", "UDG", "Instituto Tecnológico de Morelia"]
+
+const fetchFiltersData = async () => {
+  try {
+    subjectsList.value = await cacheStore.getSubjectsAll()
+  } catch (err) {
+    console.error('Failed to load subjects for filters', err)
+  }
+}
+
+const fetchResults = async () => {
+  loading.value = true
+  try {
+    const params = {}
+    if (searchQuery.value) params.search = searchQuery.value
+    if (selectedSubject.value !== 'all') params.subject_id = selectedSubject.value
+
+    // Fetch subjects (only filter by search query if any)
+    const subjRes = await api.get('/subjects', { params: { search: searchQuery.value } })
+    subjectsResults.value = (subjRes.data.data || subjRes.data).slice(0, 6)
+
+    // Fetch professors
+    if (selectedRole.value === 'all' || selectedRole.value === 'professor') {
+      const profRes = await api.get('/professors', { params })
+      professorsResults.value = (profRes.data.data || profRes.data).slice(0, 6)
+    } else {
+      professorsResults.value = []
+    }
+
+    // Fetch tutors
+    if (selectedRole.value === 'all' || selectedRole.value === 'tutor') {
+      const tutRes = await api.get('/tutors', { params })
+      tutorsResults.value = (tutRes.data.data || tutRes.data).slice(0, 6)
+    } else {
+      tutorsResults.value = []
+    }
+    
+  } catch (err) {
+    console.error('Failed to load search results', err)
+  } finally {
+    loading.value = false
+  }
+}
 
 const clearFilters = () => {
   searchQuery.value = ""
-  selectedSubject.value = "All Subjects"
-  selectedUniversity.value = "All Universities"
-  showAvailableOnly.value = false
+  selectedSubject.value = "all"
+  selectedUniversity.value = "all"
+  selectedRole.value = "all"
+  fetchResults()
 }
+
+let timeout = null
+watch(searchQuery, () => {
+  clearTimeout(timeout)
+  timeout = setTimeout(() => {
+    fetchResults()
+  }, 500)
+})
+
+watch([selectedSubject, selectedUniversity, selectedRole], () => {
+  fetchResults()
+})
+
+onMounted(() => {
+  fetchFiltersData()
+  fetchResults()
+})
 </script>
 
 <template>
@@ -62,8 +107,8 @@ const clearFilters = () => {
     <div class="mx-auto max-w-7xl px-4 py-8">
       <!-- Search Header -->
       <div class="mb-8">
-        <h1 class="text-3xl font-bold">Find a Tutor</h1>
-        <p class="mt-1 text-muted-foreground">Browse and connect with verified tutors</p>
+        <h1 class="text-3xl font-bold">Explorar</h1>
+        <p class="mt-1 text-muted-foreground">Encuentra materias, maestros y tutores verificados</p>
       </div>
 
       <!-- Search and Filters -->
@@ -73,7 +118,7 @@ const clearFilters = () => {
             <Search class="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
             <Input
               type="text"
-              placeholder="Search by name, subject, or specialty..."
+              placeholder="Buscar por nombre o materia..."
               v-model="searchQuery"
               class="h-12 pl-12"
             />
@@ -84,7 +129,7 @@ const clearFilters = () => {
             @click="showFilters = !showFilters"
           >
             <Filter class="mr-2 h-4 w-4" />
-            Filters
+            Filtros
           </Button>
         </div>
 
@@ -92,45 +137,47 @@ const clearFilters = () => {
         <div class="hidden items-center gap-4 lg:flex z-40 relative">
           <Select v-model="selectedSubject">
             <SelectTrigger class="w-48">
-              <SelectValue placeholder="Subject" />
+              <SelectValue placeholder="Materia" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem v-for="subject in subjects" :key="subject" :value="subject">
-                {{ subject }}
+              <SelectItem value="all">Todas las Materias</SelectItem>
+              <SelectItem v-for="subject in subjectsList" :key="subject.id" :value="subject.id.toString()">
+                {{ subject.name }}
               </SelectItem>
             </SelectContent>
           </Select>
 
           <Select v-model="selectedUniversity">
             <SelectTrigger class="w-64">
-              <SelectValue placeholder="University" />
+              <SelectValue placeholder="Universidad" />
             </SelectTrigger>
             <SelectContent>
+              <SelectItem value="all">Todas las Universidades</SelectItem>
               <SelectItem v-for="uni in universities" :key="uni" :value="uni">
                 {{ uni }}
               </SelectItem>
             </SelectContent>
           </Select>
-
-          <div class="flex items-center gap-2">
-            <Checkbox
-              id="available"
-              :checked="showAvailableOnly"
-              @update:checked="val => showAvailableOnly = val"
-            />
-            <Label for="available" class="text-sm">
-              Available now
-            </Label>
-          </div>
+          
+          <Select v-model="selectedRole">
+            <SelectTrigger class="w-48">
+              <SelectValue placeholder="Rol" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Todos los Roles</SelectItem>
+              <SelectItem value="professor">Solo Maestros</SelectItem>
+              <SelectItem value="tutor">Solo Tutores</SelectItem>
+            </SelectContent>
+          </Select>
 
           <Button 
-            v-if="selectedSubject !== 'All Subjects' || selectedUniversity !== 'All Universities' || showAvailableOnly || searchQuery"
+            v-if="selectedSubject !== 'all' || selectedUniversity !== 'all' || selectedRole !== 'all' || searchQuery"
             variant="ghost" 
             size="sm" 
             @click="clearFilters"
           >
             <X class="mr-1 h-4 w-4" />
-            Clear filters
+            Limpiar filtros
           </Button>
         </div>
 
@@ -138,120 +185,196 @@ const clearFilters = () => {
         <div v-if="showFilters" class="space-y-4 rounded-lg border bg-card p-4 lg:hidden relative z-40">
           <Select v-model="selectedSubject">
             <SelectTrigger>
-              <SelectValue placeholder="Subject" />
+              <SelectValue placeholder="Materia" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem v-for="subject in subjects" :key="subject" :value="subject">
-                {{ subject }}
+              <SelectItem value="all">Todas las Materias</SelectItem>
+              <SelectItem v-for="subject in subjectsList" :key="subject.id" :value="subject.id.toString()">
+                {{ subject.name }}
               </SelectItem>
             </SelectContent>
           </Select>
 
           <Select v-model="selectedUniversity">
             <SelectTrigger>
-              <SelectValue placeholder="University" />
+              <SelectValue placeholder="Universidad" />
             </SelectTrigger>
             <SelectContent>
+              <SelectItem value="all">Todas las Universidades</SelectItem>
               <SelectItem v-for="uni in universities" :key="uni" :value="uni">
                 {{ uni }}
               </SelectItem>
             </SelectContent>
           </Select>
 
-          <div class="flex items-center gap-2">
-            <Checkbox
-              id="available-mobile"
-              :checked="showAvailableOnly"
-              @update:checked="val => showAvailableOnly = val"
-            />
-            <Label for="available-mobile" class="text-sm">
-              Available now
-            </Label>
-          </div>
+          <Select v-model="selectedRole">
+            <SelectTrigger>
+              <SelectValue placeholder="Rol" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Todos los Roles</SelectItem>
+              <SelectItem value="professor">Solo Maestros</SelectItem>
+              <SelectItem value="tutor">Solo Tutores</SelectItem>
+            </SelectContent>
+          </Select>
 
           <Button variant="outline" class="w-full" @click="clearFilters">
-            Clear filters
+            Limpiar filtros
           </Button>
         </div>
       </div>
 
-      <!-- Results Count -->
-      <p class="mb-4 text-sm text-muted-foreground">
-        Showing {{ filteredTutors.length }} tutor{{ filteredTutors.length !== 1 ? "s" : "" }}
-      </p>
-
-      <!-- Tutor Grid -->
-      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <Card v-for="tutor in filteredTutors" :key="tutor.id" class="group overflow-hidden transition-all hover:shadow-lg">
-          <CardContent class="p-0 flex flex-col h-full">
-            <div class="p-6 flex-1">
-              <div class="flex items-start gap-4">
-                <div class="relative">
-                  <img
-                    :src="tutor.image"
-                    :alt="tutor.name"
-                    class="h-16 w-16 rounded-full object-cover ring-2 ring-primary/20"
-                  />
-                  <span v-if="tutor.available" class="absolute bottom-0 right-0 h-4 w-4 rounded-full border-2 border-card bg-green-500" />
-                </div>
-                <div class="flex-1 min-w-0">
-                  <h3 class="font-semibold truncate">{{ tutor.name }}</h3>
-                  <p class="text-sm text-primary font-medium">{{ tutor.subject }}</p>
-                  <p class="text-xs text-muted-foreground">{{ tutor.specialty }}</p>
-                </div>
-              </div>
-
-              <p class="mt-4 text-sm text-muted-foreground line-clamp-2">{{ tutor.bio }}</p>
-
-              <div class="mt-4 flex flex-wrap gap-2">
-                <Badge variant="secondary" class="gap-1">
-                  <MapPin class="h-3 w-3" />
-                  {{ tutor.university }}
-                </Badge>
-                <Badge variant="secondary" class="gap-1">
-                  <Clock class="h-3 w-3" />
-                  {{ tutor.available ? "Available" : "Busy" }}
-                </Badge>
-              </div>
-
-              <div class="mt-4 flex items-center justify-between border-t border-border pt-4">
-                <div class="flex items-center gap-3">
-                  <div class="flex items-center gap-1">
-                    <Star class="h-4 w-4 fill-primary text-primary" />
-                    <span class="font-medium">{{ tutor.rating }}</span>
-                    <span class="text-xs text-muted-foreground">({{ tutor.reviews }})</span>
-                  </div>
-                </div>
-                <div class="flex items-center gap-1 text-muted-foreground">
-                  <DollarSign class="h-4 w-4" />
-                  <span class="font-semibold text-foreground">${{ tutor.price }}</span>
-                  <span class="text-xs">/hr</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="border-t border-border bg-muted/30 p-4 mt-auto">
-              <div class="flex gap-2">
-                <router-link :to="`/profile?id=${tutor.id}`" class="flex-1 block">
-                  <Button variant="outline" class="w-full">
-                    View Profile
-                  </Button>
-                </router-link>
-                <router-link :to="`/chat?tutor=${tutor.id}`" class="flex-1 block">
-                  <Button class="w-full">Message</Button>
-                </router-link>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+      <div v-if="loading" class="py-12 text-center text-muted-foreground">
+        <div class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent mb-4"></div>
+        <p>Buscando...</p>
       </div>
 
-      <div v-if="filteredTutors.length === 0" class="py-12 text-center">
-        <p class="text-lg font-medium">No tutors found</p>
-        <p class="text-muted-foreground">Try adjusting your filters or search query</p>
-        <Button variant="outline" class="mt-4" @click="clearFilters">
-          Clear all filters
-        </Button>
+      <div v-else class="space-y-12">
+        
+        <!-- Materias Section -->
+        <section v-if="subjectsResults.length > 0 && selectedRole === 'all'">
+          <div class="mb-6 flex items-center justify-between">
+            <h2 class="text-2xl font-bold">Materias</h2>
+            <router-link to="/subjects">
+              <Button variant="outline" size="sm">
+                Ver Todo
+                <ChevronRight class="ml-1 h-4 w-4" />
+              </Button>
+            </router-link>
+          </div>
+          <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <Card v-for="category in subjectsResults" :key="category.id" class="group cursor-pointer transition-all hover:shadow-lg hover:border-primary/50" @click="router.push(`/subjects`)">
+              <CardHeader>
+                <div class="flex items-start justify-between">
+                  <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                    <component :is="BookOpen" class="h-6 w-6 text-primary" />
+                  </div>
+                  <div class="flex items-center gap-1 text-sm text-muted-foreground">
+                    <Star class="h-4 w-4 fill-primary text-primary" />
+                    {{ category.average_rating ? category.average_rating + ' ★' : 'Nuevo' }}
+                  </div>
+                </div>
+                <CardTitle class="mt-4">{{ category.name }}</CardTitle>
+                <CardDescription class="line-clamp-2">{{ category.description || 'Sin descripción' }}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-1 text-sm text-muted-foreground">
+                    <Users class="h-4 w-4" />
+                    {{ category.tutors_count === 1 ? '1 Tutor' : `${category.tutors_count} Tutores` }}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        <!-- Maestros Section -->
+        <section v-if="professorsResults.length > 0">
+          <div class="mb-6 flex items-center justify-between">
+            <h2 class="text-2xl font-bold">Maestros</h2>
+            <router-link to="/professors">
+              <Button variant="outline" size="sm">
+                Ver Todo
+                <ChevronRight class="ml-1 h-4 w-4" />
+              </Button>
+            </router-link>
+          </div>
+          <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <Card v-for="tutor in professorsResults" :key="tutor.id" class="group transition-all hover:shadow-lg">
+              <CardContent class="p-0 flex flex-col h-full">
+                <div class="p-6 flex-1">
+                  <div class="flex items-start gap-4">
+                    <div class="h-16 w-16 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-2xl uppercase">
+                      {{ tutor.name.charAt(0) }}
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <h3 class="font-semibold truncate">{{ tutor.name }} {{ tutor.lastname }}</h3>
+                      <p class="text-sm text-primary font-medium">Profesor Especializado</p>
+                      <div class="flex items-center gap-1 mt-1">
+                        <Star class="h-4 w-4 fill-primary text-primary" />
+                        <span class="font-medium text-sm">{{ tutor.tutor_reviews_avg_rating ? parseFloat(tutor.tutor_reviews_avg_rating).toFixed(1) : 'Nuevo' }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="mt-4 text-sm text-muted-foreground line-clamp-3">{{ tutor.bio || 'Sin descripción disponible.' }}</p>
+                </div>
+                <div class="border-t border-border bg-muted/30 p-4 mt-auto">
+                  <div class="flex gap-2">
+                    <router-link :to="`/profile/${tutor.id}`" class="flex-1 block">
+                      <Button variant="outline" class="w-full h-9 text-xs">
+                        <UserIcon class="h-3 w-3 mr-1" /> Perfil
+                      </Button>
+                    </router-link>
+                    <router-link :to="`/chat?tutor=${tutor.id}`" class="flex-1 block">
+                      <Button class="w-full h-9 text-xs">
+                        <MessageSquare class="h-3 w-3 mr-1" /> Mensaje
+                      </Button>
+                    </router-link>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        <!-- Tutores Section -->
+        <section v-if="tutorsResults.length > 0">
+          <div class="mb-6 flex items-center justify-between">
+            <h2 class="text-2xl font-bold">Tutores</h2>
+            <router-link to="/tutors">
+              <Button variant="outline" size="sm">
+                Ver Todo
+                <ChevronRight class="ml-1 h-4 w-4" />
+              </Button>
+            </router-link>
+          </div>
+          <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <Card v-for="tutor in tutorsResults" :key="tutor.id" class="group transition-all hover:shadow-lg">
+              <CardContent class="p-0 flex flex-col h-full">
+                <div class="p-6 flex-1">
+                  <div class="flex items-start gap-4">
+                    <div class="h-16 w-16 rounded-full bg-secondary flex items-center justify-center text-secondary-foreground font-bold text-2xl uppercase">
+                      {{ tutor.name.charAt(0) }}
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <h3 class="font-semibold truncate">{{ tutor.name }} {{ tutor.lastname }}</h3>
+                      <p class="text-sm text-secondary-foreground font-medium">Estudiante Universitario</p>
+                      <div class="flex items-center gap-1 mt-1">
+                        <Star class="h-4 w-4 fill-primary text-primary" />
+                        <span class="font-medium text-sm">{{ tutor.tutor_reviews_avg_rating ? parseFloat(tutor.tutor_reviews_avg_rating).toFixed(1) : 'Nuevo' }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="mt-4 text-sm text-muted-foreground line-clamp-3">{{ tutor.bio || 'Sin descripción disponible.' }}</p>
+                </div>
+                <div class="border-t border-border bg-muted/30 p-4 mt-auto">
+                  <div class="flex gap-2">
+                    <router-link :to="`/profile/${tutor.id}`" class="flex-1 block">
+                      <Button variant="outline" class="w-full h-9 text-xs">
+                        <UserIcon class="h-3 w-3 mr-1" /> Perfil
+                      </Button>
+                    </router-link>
+                    <router-link :to="`/chat?tutor=${tutor.id}`" class="flex-1 block">
+                      <Button class="w-full h-9 text-xs">
+                        <MessageSquare class="h-3 w-3 mr-1" /> Mensaje
+                      </Button>
+                    </router-link>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        <div v-if="subjectsResults.length === 0 && professorsResults.length === 0 && tutorsResults.length === 0" class="py-12 text-center">
+          <p class="text-lg font-medium">No se encontraron resultados</p>
+          <p class="text-muted-foreground">Intenta ajustar tus filtros o búsqueda</p>
+          <Button variant="outline" class="mt-4" @click="clearFilters">
+            Limpiar filtros
+          </Button>
+        </div>
+
       </div>
     </div>
   </div>

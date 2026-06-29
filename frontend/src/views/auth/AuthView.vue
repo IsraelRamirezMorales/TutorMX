@@ -49,10 +49,10 @@ const handleRegister = () => {
         <div class="max-w-md text-center text-accent-foreground">
           <div class="mb-8 flex justify-center">
             <div class="flex h-20 w-20 items-center justify-center rounded-2xl bg-white p-2 shadow-lg border border-border">
-              <img src="/logo.png" alt="TutorMX Logo" class="h-full w-full object-contain" />
+              <img src="/logo.png" alt="TÚ ASESORÍA Logo" class="h-full w-full object-contain" />
             </div>
           </div>
-          <h1 class="mb-4 text-4xl font-bold text-balance">Welcome to TutorMX</h1>
+          <h1 class="mb-4 text-4xl font-bold text-balance">Welcome to TÚ ASESORÍA</h1>
           <p class="mb-8 text-lg text-accent-foreground/80">
             Connect with university students and teachers for academic advising and tutoring sessions
           </p>
@@ -86,10 +86,10 @@ const handleRegister = () => {
           <CardHeader class="space-y-1 text-center">
             <div class="mb-4 flex justify-center lg:hidden">
               <div class="flex h-14 w-14 items-center justify-center rounded-xl bg-white p-1.5 border border-border shadow-sm">
-                <img src="/logo.png" alt="TutorMX Logo" class="h-full w-full object-contain" />
+                <img src="/logo.png" alt="TÚ ASESORÍA Logo" class="h-full w-full object-contain" />
               </div>
             </div>
-            <CardTitle class="text-2xl font-bold">TutorMX</CardTitle>
+            <CardTitle class="text-2xl font-bold">TÚ ASESORÍA</CardTitle>
             <CardDescription>Sign in to your account or create a new one</CardDescription>
           </CardHeader>
           <CardContent>

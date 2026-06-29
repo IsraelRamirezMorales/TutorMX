@@ -1,56 +1,121 @@
-# TutorMX 🎓
+<div align="center">
+  <img src="./frontend/public/logo.png" alt="TÚ ASESORÍA Logo" width="300" />
 
-**TutorMX** (INTRU-HUB) es una plataforma web integral y responsiva diseñada para conectar a estudiantes universitarios con tutores académicos en tiempo real. El sistema permite descubrir materias, realizar búsquedas avanzadas de asesores, coordinar tutorías y fomentar la retroalimentación y reputación académica dentro de comunidades universitarias.
+  # TÚ ASESORÍA
+  **Conectando el Conocimiento Universitario.**
 
-El proyecto está estructurado como un **monorepositorio dockerizado**, separando la API REST (Backend en Laravel) y la interfaz SPA (Frontend en Vue.js 3).
+  *Desarrollado por **DevStarLabs***
 
----
-
-## 🚀 Arquitectura y Tecnologías
-
-El sistema implementa una arquitectura moderna de software con desacoplamiento total:
-
-* **Backend**: Construido con **PHP Laravel**, exponiendo una API REST robusta, utilizando Eloquent ORM para la interacción de datos y validaciones avanzadas en solicitudes HTTP.
-* **Frontend**: SPA reactiva construida con **Vue.js 3 (Composition API)**, utilizando **Vite** para la compilación rápida y **Pinia** para la gestión centralizada del estado de sesión.
-* **Base de Datos**: PostgreSQL alojada de forma serverless en **Neon**, garantizando alta disponibilidad, escalabilidad y conexiones SSL seguras.
-* **Contenerización**: Orquestación completa mediante **Docker y Docker Compose**, permitiendo un entorno homogéneo y portable de desarrollo con soporte para *Hot-Reload* (recarga en caliente).
-
----
-
-## 🗺️ Roadmap del Proyecto y Sprints
-
-El desarrollo de la plataforma se divide en tres fases incrementales bien definidas:
-
-### 📅 Sprint 1: Bases Técnicas y Autenticación
-**Objetivo:** Construir la infraestructura base, configurar la base de datos relacional y desarrollar el flujo completo de autenticación y consulta inicial.
-* **Estructura del Proyecto:** Configuración del repositorio, Docker Compose, Git Flow, dependencias iniciales y andamiaje de Laravel y Vue 3.
-* **Base de Datos & Neon:** Diseño de tablas relacionales, llaves primarias/foráneas, índices de búsqueda y migraciones iniciales a Neon.
-* **Autenticación Completa (JWT):**
-  * Registro de usuarios con validación obligatoria de correo institucional (filtrado por dominio universitario).
-  * Inicio de sesión seguro con generación de Tokens JWT y manejo centralizado de errores.
-  * Middleware JWT para validación y persistencia de sesión activa (endpoint `/me` e interfaz local).
-* **Gestión de Universidades y Materias:** Catálogo interactivo de materias y universidades, desplegando tarjetas de materias destacadas en el Home con promedio de ratings y contadores.
-* **Perfil de Usuario:** Actualización de información básica, biografía y carga de foto de perfil.
-* **Calidad:** Pruebas unitarias e integración de flujos principales.
+  <p align="center">
+    <a href="#la-problemática">La Problemática</a> •
+    <a href="#nuestra-solución">Nuestra Solución</a> •
+    <a href="#tecnologías">Tecnologías</a> •
+    <a href="#funcionalidades-principales">Funcionalidades</a> •
+    <a href="#despliegue-local">Despliegue Local</a>
+  </p>
+</div>
 
 ---
 
-### 📅 Sprint 2: Búsqueda y Descubrimiento
-**Objetivo:** Implementar la búsqueda avanzada de asesores y los perfiles públicos detallados para completar la experiencia de descubrimiento.
-* **Búsqueda Avanzada de Tutores:** Filtros interactivos de búsqueda en tiempo real por nombre de tutor, materias impartidas, áreas de especialidad, universidad de origen y disponibilidad horaria.
-* **Perfil Público de Tutor:** Panel detallado con información profesional, historial de materias del tutor, biografía, calificaciones promedio obtenidas y estadísticas de desempeño.
-* **Detalle de Materias:** Vista expandible que despliega el temario oficial de la materia y el listado de tutores destacados que la imparten.
-* **Dashboard Avanzado:** Integración de rankings, destacando a los tutores recomendados y mejor valorados en el Home.
+## La Problemática
+
+La vida universitaria es un desafío constante. A diario, miles de estudiantes se enfrentan a materias filtro, conceptos matemáticos complejos o lenguajes de programación abrumadores. ¿El mayor problema? **El aislamiento académico.**
+
+Actualmente, cuando un estudiante se estanca, depende de la disponibilidad limitada de sus profesores oficiales o de buscar respuestas genéricas en internet. Por otro lado, existen estudiantes excepcionales (y profesores particulares) que dominan estas materias pero **no tienen una plataforma centralizada y confiable** para ofrecer su ayuda, compartir su conocimiento y generar ingresos extra o reputación académica.
+
+El conocimiento está disperso, los horarios chocan y no existe una garantía de calidad.
+
+## Nuestra Solución
+
+**TÚ ASESORÍA** (anteriormente INTRU-HUB) es la respuesta de **DevStarLabs** a esta desconexión. 
+
+Hemos construido un ecosistema web integral diseñado exclusivamente para **democratizar el acceso al conocimiento especializado** dentro y fuera de los campus universitarios.
+
+En nuestra plataforma:
+- **El que busca encuentra:** Un estudiante puede explorar un catálogo infinito de materias y filtrar a los mejores maestros o tutores basándose en reseñas reales, universidad de origen y disponibilidad.
+- **El que sabe, enseña:** Cualquiera con el conocimiento necesario puede construir un perfil público, destacar sus logros y ofrecer tutorías (diferenciando a los Tutores de una sola materia, de los Maestros que dominan múltiples áreas).
+- **Confianza Cero-Fricción:** Un sistema de reputación (reseñas y estrellas) garantiza que siempre encuentres la ayuda de mayor calidad posible.
 
 ---
 
-### 📅 Sprint 3: Interacción, Reputación y Validación
-**Objetivo:** Desarrollar las herramientas de comunicación, gestión de reputación y el flujo administrativo para la postulación de tutores.
-* **Mensajería en Tiempo Real:** Canal de comunicación integrado que permite conversaciones directas y persistentes entre estudiantes y tutores (creación automática de chats desde el perfil).
-* **Postulación de Tutores:** Flujo para que un usuario convencional solicite convertirse en tutor, incluyendo la carga digital de certificados y documentos para su revisión y aprobación por parte del administrador.
-* **Gestión de Logros Académicos:** CRUD para que los tutores agreguen reconocimientos y certificaciones a sus perfiles públicos.
-* **Evaluación y Reviews:** Sistema de retroalimentación donde el estudiante califica el desempeño del tutor con escala de estrellas (ratings) y comentarios tras finalizar cada asesoría.
-* **Flujo Post-Asesoría:** Automatización del envío de notificaciones de evaluación al concluir las sesiones para actualizar dinámicamente la reputación del tutor.
+## Tecnologías
+
+Para resolver este problema a gran escala, **DevStarLabs** ha diseñado una arquitectura completamente desacoplada y moderna:
+
+| Componente | Tecnología | Propósito |
+|------------|------------|-----------|
+| **Backend** | ![Laravel](https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white) | API REST robusta, Eloquent ORM, Validaciones complejas y reglas de negocio. |
+| **Frontend** | ![Vue.js](https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vue.js&logoColor=4FC08D) | Single Page Application (SPA) reactiva con Composition API, TailwindCSS y Pinia. |
+| **Base de Datos**| ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white) | Alojada en Neon (Serverless), garantizando escalabilidad e integridad relacional. |
+| **Orquestación**| ![Docker](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white) | Entornos homogéneos a través de Docker Compose para un desarrollo sin fricciones. |
 
 ---
-**Desarrolladores del Proyecto:** Israel Ramírez Morales & Gabriel Chacón Arellano.
+
+## Funcionalidades Principales
+
+### 1. El Explorador Definitivo
+Un motor de búsqueda avanzado con interfaz de cuadrículas que categoriza dinámicamente la información en tres pilares:
+- **Materias:** Navegación por áreas de conocimiento.
+- **Maestros:** Profesores especializados que imparten más de 1 materia.
+- **Tutores:** Estudiantes universitarios enfocados en dominar 1 sola materia.
+
+### 2. Perfiles Públicos Dinámicos
+Cada asesor cuenta con una tarjeta de presentación digital que incluye:
+- Biografía y áreas de experiencia.
+- Distintivo visual (Maestro vs Tutor).
+- Historial de reseñas públicas (100% reales) y calificación promedio calculada matemáticamente en el backend.
+- Botón de acción rápida para iniciar un chat.
+
+### 3. Optimización en Memoria (Caché)
+Para garantizar una experiencia veloz e ininterrumpida, implementamos sistemas de caché del lado del cliente usando Pinia, reduciendo la carga del servidor en consultas frecuentes (como los tutores destacados del Home).
+
+---
+
+## Despliegue Local (Para Desarrolladores)
+
+Si deseas levantar el ecosistema en tu entorno local para contribuir o probar la plataforma:
+
+1. **Clona el repositorio:**
+   ```bash
+   git clone https://github.com/DevStarLabs/TU-ASESORIA.git
+   cd TU-ASESORIA
+   ```
+
+2. **Levanta los contenedores con Docker:**
+   ```bash
+   docker-compose up -d
+   ```
+
+3. **Configura el Backend:**
+   ```bash
+   cd backend
+   cp .env.example .env
+   # Configura tus credenciales de PostgreSQL (Neon) en el .env
+   composer install
+   php artisan key:generate
+   php artisan migrate --seed
+   ```
+
+4. **Inicia el Frontend:**
+   ```bash
+   cd frontend
+   npm install
+   npm run dev
+   ```
+
+---
+
+## Equipo de Desarrollo
+
+| Nombre | Rol | Contribución |
+| :--- | :--- | :--- |
+| **Gabriel Chacón Arellano** | Scrum Master y Desarrollador Full Stack | Responsable de la gestión del proyecto bajo la metodología Scrum, el diseño y modelado de la base de datos, así como del desarrollo del backend y frontend. |
+| **Israel Ramírez Morales** | Desarrollador Full Stack | Colaboró en el diseño de la base de datos y en el desarrollo del backend y frontend de la aplicación. |
+| **Néstor André García Magdaleno** | Desarrollador Full Stack | Participó en el desarrollo del backend y frontend, así como en la implementación e integración de funcionalidades. |
+
+---
+
+<div align="center">
+  <i>Diseñando el futuro del aprendizaje colaborativo.</i><br>
+  <b>© 2026 DevStarLabs</b>
+</div>
