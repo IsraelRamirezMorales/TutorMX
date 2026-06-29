@@ -1,7 +1,8 @@
 <div align="center">
-  <img src="./frontend/public/logo.png" alt="TÚ ASESORÍA Logo" width="300" />
 
   # TÚ ASESORÍA
+   <img src="./frontend/public/logo.png" alt="TÚ ASESORÍA Logo" width="300" />
+   
   > 🚧 **Sitio actualmente en fase de desarrollo**
   
   **Conectando el Conocimiento Universitario.**
@@ -70,40 +71,6 @@ Cada asesor cuenta con una tarjeta de presentación digital que incluye:
 
 ### 3. Optimización en Memoria (Caché)
 Para garantizar una experiencia veloz e ininterrumpida, implementamos sistemas de caché del lado del cliente usando Pinia, reduciendo la carga del servidor en consultas frecuentes (como los tutores destacados del Home).
-
----
-
-## Despliegue Local (Para Desarrolladores)
-
-Si deseas levantar el ecosistema en tu entorno local para contribuir o probar la plataforma:
-
-1. **Clona el repositorio:**
-   ```bash
-   git clone https://github.com/DevStarLabs/TU-ASESORIA.git
-   cd TU-ASESORIA
-   ```
-
-2. **Levanta los contenedores con Docker:**
-   ```bash
-   docker-compose up -d
-   ```
-
-3. **Configura el Backend:**
-   ```bash
-   cd backend
-   cp .env.example .env
-   # Configura tus credenciales de PostgreSQL (Neon) en el .env
-   composer install
-   php artisan key:generate
-   php artisan migrate --seed
-   ```
-
-4. **Inicia el Frontend:**
-   ```bash
-   cd frontend
-   npm install
-   npm run dev
-   ```
 
 ---
 
