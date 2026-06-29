@@ -2,6 +2,8 @@
   <img src="./frontend/public/logo.png" alt="TÚ ASESORÍA Logo" width="300" />
 
   # TÚ ASESORÍA
+  > 🚧 **Sitio actualmente en fase de desarrollo**
+  
   **Conectando el Conocimiento Universitario.**
 
   *Desarrollado por **DevStarLabs***
