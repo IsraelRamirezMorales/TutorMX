@@ -30,4 +30,21 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Get the reviews for this user as a tutor.
+     */
+    public function tutorReviews()
+    {
+        return $this->hasMany(Review::class, 'tutor_id');
+    }
+
+    /**
+     * Get the subjects associated with this user.
+     */
+    public function subjects()
+    {
+        return $this->belongsToMany(Subject::class, 'user_subjects', 'user_id', 'subject_id')
+                    ->withPivot('relationship_type');
+    }
 }

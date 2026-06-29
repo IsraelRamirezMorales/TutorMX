@@ -3,6 +3,18 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\TutorController;
+
+Route::get('/subjects', [SubjectController::class, 'index']);
+Route::get('/subjects/{id}/tutors', [SubjectController::class, 'tutors']);
+
+Route::get('/tutors/featured', [TutorController::class, 'getFeatured']);
+Route::get('/tutors', [TutorController::class, 'getTutors']);
+Route::get('/professors', [TutorController::class, 'getProfessors']);
+Route::get('/tutors-all', [TutorController::class, 'getAll']);
+Route::get('/users/{id}/profile', [TutorController::class, 'getProfile']);
+
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');

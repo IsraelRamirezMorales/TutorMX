@@ -30,4 +30,7 @@ services:
     environment:
       - APP_ENV=local
       - APP_DEBUG=true
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
     restart: unless-stopped

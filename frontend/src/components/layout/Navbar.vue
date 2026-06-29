@@ -18,9 +18,10 @@ const navItems = computed(() => {
   }
 
   items.push({ href: "/home", label: "Home", icon: Home })
+  items.push({ href: "/search", label: "Explorar", icon: Search })
   
   if (authStore.isStudent) {
-    items.push({ href: "/search", label: "Search", icon: Search })
+    // Other student specific routes
   }
 
   items.push({ href: "/chat", label: "Messages", icon: MessageCircle })
@@ -37,9 +38,9 @@ const navItems = computed(() => {
 <template>
   <nav class="sticky top-0 z-50 w-full bg-zinc-950 border-b border-white/10">
     <div class="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-      <router-link to="/home" class="flex items-center gap-3 transition-opacity hover:opacity-80">
-        <img src="/logo.png" alt="TutorMX Logo" class="h-12 w-auto rounded-md bg-white p-1" />
-        <span class="text-2xl font-bold tracking-tight text-white">TutorMX</span>
+      <router-link to="/home" class="flex items-center gap-3 transition-transform hover:scale-105">
+        <img src="/logo.png" alt="TÚ ASESORÍA Logo" class="h-12 w-auto rounded-md bg-white p-1" />
+        <span class="text-2xl font-bold tracking-tight text-white">TÚ ASESORÍA</span>
       </router-link>
 
       <!-- Desktop Navigation -->
