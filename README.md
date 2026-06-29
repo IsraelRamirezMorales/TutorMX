@@ -1,7 +1,6 @@
 <div align="center">
 
-  # TÚ ASESORÍA
-   <img src="./frontend/public/logo.png" alt="TÚ ASESORÍA Logo" width="300" />
+   <img src="./frontend/public/logo.png" alt="TÚ ASESORÍA Logo" width="600" />
    
   > 🚧 **Sitio actualmente en fase de desarrollo**
   
